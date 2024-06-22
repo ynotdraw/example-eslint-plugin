@@ -12,6 +12,8 @@
   "scripts": {
     "build": "tsc --outDir dist",
     "dev": "tsc --outDir dist --watch",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },

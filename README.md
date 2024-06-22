@@ -51,7 +51,7 @@ Let's go ahead and setup our `src/` directory. I personally follow this pattern 
 
 ## ASTExplorer
 
-ESLint rules navigate the syntax tree. A great way to explore the syntax tree of a file is to use [astexplorer.net](https://astexplorer.net). The right-hand pane gives you everything you need to begin writing custom ESLint rules. You dig into different nodes and write code that traverses these nodes, evaluating the contents.
+ESLint rules navigate the abstract syntax tree. A great way to explore the abstract syntax tree of a file is to use [astexplorer.net](https://astexplorer.net). The right-hand pane gives you everything you need to begin writing custom ESLint rules. You dig into different nodes and write code that traverses these nodes, evaluating the contents.
 
 As always, I highly recommend getting a foundational understanding of how this works. It'll make you a better developer. But if you find yourself struggling, this is where I'd recommend going to the good ol' world wide web.
 
@@ -60,7 +60,7 @@ As always, I highly recommend getting a foundational understanding of how this w
 
 ## Writing our first rule
 
-Let's say we have the following code. We want to enforce that all `ref`s in React end with "Ref" in their variable declaration so that it's clear via the variable name along that this is a ref.
+Let's say we have the following code. We want to enforce that all `ref`s in React end with "Ref" in their variable declaration so that it's clear via the variable name alone that this is a ref.
 
 ```jsx
 import React, { useRef } from 'react';
@@ -75,7 +75,7 @@ export function InputComponent() {
 
 ### Boilerplate setup
 
-Let's start out with some boilerplate. This all comes from https://typescript-eslint.io/developers/custom-rules. I'll go into more detail below on setting up rules, but we'll start by creating a file under `/rules/enforce-refs-end-with-ref.ts`.
+Let's start out with some boilerplate. This all comes from https://typescript-eslint.io/developers/custom-rules. I'll go into more detail below on setting up rules, but we'll start by creating a file under `src/rules/enforce-refs-end-with-ref.ts`.
 
 Yup, I'm using TypeScript. You can use JavaScript if you'd like. I prefer to write things in TypeScript though! The autocomplete is really nice.
 
@@ -118,7 +118,7 @@ export const enforceRefsEndWithRef = createRule({
 
 ### AST Exploring
 
-Now let's head on over to the AST Explorer. Go ahead and copy/paste the following code into it.
+Now let's head on over to the ASTExplorer. Go ahead and copy/paste the following code into it.
 
 ```jsx
 import React, { useRef } from 'react';
@@ -131,9 +131,11 @@ export function InputComponent() {
 }
 ```
 
+You should see the following.
+
 ![The Variable Declaration from ASTExplorer](https://github.com/ynotdraw/example-eslint-plugin/blob/main/.github/variable.png?raw=true)
 
-We know we are wanting to target a variable declaration, so it should be no surprise there's a `VariableDeclaration` from AST Explorer. Let's dive in more to see how we get to the variable declaration name. We'll focus in on the `create` function.
+We know we are wanting to target a variable declaration, so it should be no surprise there's a `VariableDeclaration` from ASTExplorer. Let's start there! The samples from here on out will be around the `create` function for simplicity.
 
 ```ts
 create: (context) => {
@@ -145,13 +147,18 @@ create: (context) => {
 };
 ```
 
+There are actually two variable declarators listed here - one for each `useRef`. We'll be focusing on the first one. Let's dive in more to see how we get to the variable declaration name.
+
 ![Expanding the Variable Declaration in ASTExplorer](https://github.com/ynotdraw/example-eslint-plugin/blob/main/.github/double.png?raw=true)
 
-If you expand our first variable declaration, you'll notice there's a `declarations` array. Oh no! We now have another declaration inside of this declaration. Don't worry folks! When we write our ESLint function, they are recursive, so you only need to tell the function to target `VariableDeclarator`.
+If you expand our first variable declaration (`const myInput = useRef();`), you'll notice there's a `declarations` array. Oh no! We now have another variable declaration inside of this declarations array. Don't worry folks! When we write our ESLint rules, the node types are recursive, so you only need to tell the function to target `VariableDeclarator` and it'll do the rest for you.
 
-Now we need to deal with two other nodes: `id` and `init`.
+Now we need to deal with two other nodes as shown in the image above: `id` and `init`.
 
-`id` is `myInput` and `init` is `useRef`.
+- `id` is `myInput`
+- `init` is `useRef()`
+
+We'll focus on `init` first. Go ahead and expand it.
 
 ![Expanding the Variable Declaration in ASTExplorer](https://github.com/ynotdraw/example-eslint-plugin/blob/main/.github/call-expression.png?raw=true)
 
@@ -168,18 +175,19 @@ create: (context) => {
         node.init.callee.type === 'Identifier' &&
         node.init.callee.name === 'useRef' &&
       ) {
-        // If we are here, we know we are calling `useRef`
+        // If we are here, we know we are in a variable declaration
+        // that calls `useRef`
       }
     },
   };
 };
 ```
 
-So now we know we are looking at a variable declaration that is calling `useRef`. Now we can check if our variable ends with "Ref". Let's take a look at `id` now.
+So now we can be sure we are looking at a variable declaration that is calling `useRef`. Now we can check if our variable ends with "Ref" in the name. Let's take a look at `id` now.
 
 ![Exploring the Identifier in ASTExplorer](https://github.com/ynotdraw/example-eslint-plugin/blob/main/.github/id.png?raw=true)
 
-This one is a bit easier to parse through!
+This one is a bit easier to parse through! The Identifier `name` is how we get to the name of our variable, so we can combine all of above to come up with the following.
 
 ```ts
 create: (context) => {
@@ -273,13 +281,13 @@ context.report({
 });
 ```
 
-And that's it! Our lint rule is now complete.
+And that's it! Our lint rule is now complete with a great autofix.
 
 ### The completed rule
 
 I ended up making this more TypeScript friendly and using the `AST_NODE_TYPES` for folks using TypeScript. But the end result can be found at https://github.com/ynotdraw/example-eslint-plugin/blob/main/src/rules/enforce-refs-end-with-ref.ts
 
-### Add to our index file
+## Add to our index file
 
 We'll want to go ahead and add our new rule to our `src/rules/index.ts` file. This way our rules are all in the single object that ESLint likes.
 
@@ -295,7 +303,7 @@ export default rules;
 
 ## Testing
 
-If you're using only JavaScript, you can use Node's built-in [test runner](https://nodejs.org/api/test.html). I ended up using vitest due to familiarity with it already and since I'm using TypeScript.
+If you're using only JavaScript, you can use Node's built-in [test runner](https://nodejs.org/api/test.html). I ended up using vitest due to familiarity with it already and since I'm using TypeScript. It doesn't require me to compile to JavaScript, I can simply point it to my test files and it just works. That's nice.
 
 Adding tests is really important to ensure your rules are doing what you expect them to. Especially if you have `fix` functions defined.
 

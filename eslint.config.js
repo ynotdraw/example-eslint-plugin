@@ -1,3 +1,4 @@
+// From following https://eslint.org/blog/2022/08/new-config-system-part-2/
 import { FlatCompat } from '@eslint/eslintrc';
 import prettierConfig from 'eslint-config-prettier';
 import globals from 'globals';

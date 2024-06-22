@@ -1,0 +1,30 @@
+{
+  "name": "ynotdraw-example-eslint-plugin",
+  "description": "An example ESLint plugin to start your custom ESLint rules journey",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "ynotdraw",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "files": [
+    "./dist/src/*"
+  ],
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "dev": "tsc --outDir dist --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.0.2",
+    "@eslint/js": "^8.56.0",
+    "@types/eslint": "^8.56.10",
+    "@typescript-eslint/rule-tester": "^7.13.1",
+    "@typescript-eslint/types": "^7.13.1",
+    "@typescript-eslint/utils": "^7.13.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.2"
+  }
+}

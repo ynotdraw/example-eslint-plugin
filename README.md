@@ -21,13 +21,13 @@ The first step in this process is to setup a repository or new package. If you'r
 
 I have a personal, private template I use on my GitHub account that scaffolds the `package.json` for me when working in OSS, but you can copy the first commit and modify it to your needs!
 
-TODO: Add link to commit
+[Setup commit](https://github.com/ynotdraw/example-eslint-plugin/commit/a4bf4092ba083158af4ad09c830171ab988ad25a)
 
 ## Add Prettier
 
 I'm a big fan of enforcing consistency everywhere, so we add Prettier for formatting. I'm a simple man, I like Prettier's defaults. Except for [`single quotes`](https://prettier.io/docs/en/options.html#quotes). I'm definitely team `single quotes`.
 
-TODO: Add link to commit
+[Adding prettier](https://github.com/ynotdraw/example-eslint-plugin/commit/bef63202c1b5cf34e95614f05da2429ba68e8a67)
 
 ## Add ESLint
 
@@ -35,19 +35,19 @@ TODO: Add link to commit
 
 Yup! I also like linting my rules for consistency too. Let's add it!
 
-TODO: Add link to commit
+[Adding ESLint](https://github.com/ynotdraw/example-eslint-plugin/commit/7558f9d2ce94d6178b34d2fa1cec3a83db7f9bbc)
 
 ## Add a `tsconfig.json`
 
 We'll be using `tsc` to create a `dist/` so that we can generate a build and publish these bad boys. I think using `tsc` is the most convenient because we're already writing our rules with TypeScript.
 
-TODO: Add link to commit
+[Adding tsconfig.json](https://github.com/ynotdraw/example-eslint-plugin/commit/8ba165b162887b8a89a5d14e724f5091a6a82c37)
 
 ## Setup `src/`
 
 Let's go ahead and setup our `src/` directory. I personally follow this pattern as it's used in a lot of other ESLint libraries. You can configure it however you'd like!
 
-TODO: Add link to commit
+[Setting up the structure](https://github.com/ynotdraw/example-eslint-plugin/commit/b65929fdf953d14146743ac04e2e121839a5a12b)
 
 ## ASTExplorer
 
@@ -277,7 +277,7 @@ And that's it! Our lint rule is now complete.
 
 ### The completed rule
 
-I ended up making this more TypeScript friendly and using the `AST_NODE_TYPES` for folks using TypeScript. But the end result can be found at (TODO: Add link to commit).
+I ended up making this more TypeScript friendly and using the `AST_NODE_TYPES` for folks using TypeScript. But the end result can be found at https://github.com/ynotdraw/example-eslint-plugin/blob/main/src/rules/enforce-refs-end-with-ref.ts
 
 ### Add to our index file
 

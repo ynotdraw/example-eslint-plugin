@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "skipLibCheck": true,
+    "strict": true
+  },
+  // We don't want our top-level vitest files
+  // going out with `dist/`!
+  "exclude": ["vitest.*.ts"]
+}

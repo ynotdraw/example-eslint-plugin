@@ -9,6 +9,7 @@ This is an example repository for setting up a custom ESLint plugin so that you 
 
 This repository has a few opinions on how this package is constructed. I chose the following technologies:
 
+- pnpm
 - TypeScript
 - Prettier
 - ESLint
@@ -29,6 +30,8 @@ I'm a big fan of enforcing consistency everywhere, so we add Prettier for format
 
 [Adding prettier](https://github.com/ynotdraw/example-eslint-plugin/commit/bef63202c1b5cf34e95614f05da2429ba68e8a67)
 
+We'll use `pnpm format` to format our code with Prettier.
+
 ## Add ESLint
 
 > Yo dawg, I heard you like ESLint rules for your ESLint rules, so we put ESLint rules in your ESLint rules plugin.
@@ -36,6 +39,8 @@ I'm a big fan of enforcing consistency everywhere, so we add Prettier for format
 Yup! I also like linting my rules for consistency too. Let's add it!
 
 [Adding ESLint](https://github.com/ynotdraw/example-eslint-plugin/commit/7558f9d2ce94d6178b34d2fa1cec3a83db7f9bbc)
+
+We'll use `pnpm lint:fix` to run our lint command with the `--fix` flag.
 
 ## Add a `tsconfig.json`
 
@@ -303,6 +308,8 @@ export default rules;
 
 ## Testing
 
+How do we know if our rules are working as expected? Tests!
+
 If you're using only JavaScript, you can use Node's built-in [test runner](https://nodejs.org/api/test.html). I ended up using vitest due to familiarity with it already and since I'm using TypeScript. It doesn't require me to compile to JavaScript, I can simply point it to my test files and it just works. That's nice.
 
 Adding tests is really important to ensure your rules are doing what you expect them to. Especially if you have `fix` functions defined.
@@ -333,6 +340,8 @@ ruleTester.run('enforce-refs-end-with-ref', enforceRefsEndWithRef, {
   ],
 });
 ```
+
+To run the tests in this repository, run `pnpm test`.
 
 ## Building and publishing
 

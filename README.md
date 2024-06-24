@@ -201,7 +201,7 @@ create: (context) => {
       if (
         // From before
         node.init &&
-        node.init.type === 'CallExpression'
+        node.init.type === 'CallExpression' &&
         node.init.callee &&
         node.init.callee.type === 'Identifier' &&
         node.init.callee.name === 'useRef' &&

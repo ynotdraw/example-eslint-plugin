@@ -74,7 +74,7 @@ export function InputComponent() {
   const myInput = useRef(); // This should trigger the ESLint error
   const myInputRef = useRef(); // This should not trigger the ESLint error
 
-  return <input ref={myInputRef} />;
+  return <input ref={myInputRef.current} />;
 }
 ```
 
@@ -132,7 +132,7 @@ export function InputComponent() {
   const myInput = useRef(); // This should trigger the ESLint error
   const myInputRef = useRef(); // This should not trigger the ESLint error
 
-  return <input ref={myInputRef} />;
+  return <input ref={myInputRef.current} />;
 }
 ```
 
